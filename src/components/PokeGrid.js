@@ -4,11 +4,11 @@ export const PokeGrid = ({ pokemon }) => {
   const [poke, setPoke] = useState({
     name: pokemon,
     back_default: '',
-    front_default: ''
+    front_default: '',
+    error: ''
   });
 
   const getPokemon = async() =>{
-    console.log( `una vez` );
     try {
       const url =`https://pokeapi.co/api/v2/pokemon/${pokemon.toLowerCase()}`;
       const resp = await fetch( url );
@@ -20,7 +20,12 @@ export const PokeGrid = ({ pokemon }) => {
         front_default: sprites.front_default
       });
     } catch (error) {
-      console.log( `no se ecnontró la imagen` );
+      setPoke({
+        name: '',
+        back_default: '',
+        front_default: '',
+        error: 'No se encontró el pokemon'
+      });
     }
   }
 
@@ -32,8 +37,8 @@ export const PokeGrid = ({ pokemon }) => {
     <>
       <hr></hr>
       <h3>{poke.name.replace(poke.name.charAt(0), poke.name.charAt(0).toUpperCase())}</h3>
-      <img alt="Poke back" src={poke.back_default}/>
-      <img alt="Poke front" src={poke.front_default}/>
+      {poke.error ? <h2>No se encontró el pokemon</h2> : <div><img alt="Poke back" src={poke.back_default}/><img alt="Poke front" src={poke.front_default}/></div>}
+
     </>
   )
 }
